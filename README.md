@@ -6,8 +6,6 @@ An AWS Lambda function to run [Graffiti Monkey](https://github.com/Answers4AWS/g
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Support](#support)
-- [Contributing](#contributing)
 
 ## Installation
 
