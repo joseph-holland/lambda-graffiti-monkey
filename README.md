@@ -1,6 +1,6 @@
 # Lambda Graffiti Monkey
 
-An AWS Lambda function to run [Graffiti Monkey](https://github.com/Answers4AWS/graffiti-monkey) serverless.
+An AWS Lambda function to run [Graffiti Monkey](https://github.com/Answers4AWS/graffiti-monkey) serverless. This function works great when triggered by a CloudWatch Events scheduled rule.
 
 ## Table of Contents
 
@@ -33,7 +33,7 @@ First we need to set some environment variables for Graffiti Monkey to use, so j
 (lambda-graffiti-monkey) $ export INSTANCE_FILTER=""
 ```
 
-Now we can just execute the function using the python-lambda tool:
+Now we can just execute the function using the [python-lambda](https://github.com/nficano/python-lambda) tool:
 
 ```sh
 (graffiti-monkey) $ lambda invoke -v

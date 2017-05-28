@@ -31,8 +31,7 @@ def handler(event, context):
         gm.initialize_monkey()
         gm.start_tags_propagation()
 
-        print('Graffiti Monkey completed successfully!')
-        sys.exit(0)
+        return 'Graffiti Monkey completed successfully!'
 
     except KeyError, e:
         print('Error: Environment variable not set: ' + str(e))
