@@ -93,13 +93,6 @@ Starting new HTTPS connection (1): lambda.eu-west-1.amazonaws.com
 
 For Graffiti Monkey to run properly you will need to set the following Lambda environment variables:
 
-```sh
-REGION="eu-west-1"
-INSTANCE_TAGS_TO_PROPAGATE="Name,device,instance_id"
-VOLUME_TAGS_TO_PROPAGATE="Name,device,instance_id"
-VOLUME_TAGS_TO_BE_SET=""
-SNAPSHOT_TAGS_TO_BE_SET=""
-INSTANCE_FILTER=""
-```
+![Lambda Environment Variables](lambda_envvars.png "Lambda Environment Variables")
 
 Now you can save and test the function.
