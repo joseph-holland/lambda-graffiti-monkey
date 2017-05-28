@@ -25,12 +25,12 @@ $ source graffiti-monkey/bin/activate
 First we need to set some environment variables for Graffiti Monkey to use, so just paste the below into your shell setting tags as required:
 
 ```sh
-(lambda-graffiti-monkey) $ export REGION="eu-west-1"
-(lambda-graffiti-monkey) $ export INSTANCE_TAGS_TO_PROPAGATE="Name,device,instance_id"
-(lambda-graffiti-monkey) $ export VOLUME_TAGS_TO_PROPAGATE="Name,device,instance_id"
-(lambda-graffiti-monkey) $ export VOLUME_TAGS_TO_BE_SET=""
-(lambda-graffiti-monkey) $ export SNAPSHOT_TAGS_TO_BE_SET=""
-(lambda-graffiti-monkey) $ export INSTANCE_FILTER=""
+(graffiti-monkey) $ export REGION="eu-west-1"
+(graffiti-monkey) $ export INSTANCE_TAGS_TO_PROPAGATE="Name,device,instance_id"
+(graffiti-monkey) $ export VOLUME_TAGS_TO_PROPAGATE="Name,device,instance_id"
+(graffiti-monkey) $ export VOLUME_TAGS_TO_BE_SET=""
+(graffiti-monkey) $ export SNAPSHOT_TAGS_TO_BE_SET=""
+(graffiti-monkey) $ export INSTANCE_FILTER=""
 ```
 
 Now we can just execute the function using the [python-lambda](https://github.com/nficano/python-lambda) tool:
