@@ -6,10 +6,10 @@ from pprint import pprint
 
 import os
 import sys
+import logging
 
-print('Loading function')
-
-del sys.argv[0]
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
 
 
 def envvar_to_list(envvar):
@@ -17,6 +17,7 @@ def envvar_to_list(envvar):
 
 
 def handler(event, context):
+    log.info('Loading function')
     try:
         gm = gm_cli.GraffitiMonkeyCli()
         gm.region = os.environ['REGION']
@@ -26,14 +27,12 @@ def handler(event, context):
                      "_snapshot_tags_to_be_set": envvar_to_list('SNAPSHOT_TAGS_TO_BE_SET'),
                      "_instance_filter": envvar_to_list('INSTANCE_FILTER'),
                      }
-
-        print('Releasing the Graffiti Monkey')
         gm.initialize_monkey()
         gm.start_tags_propagation()
 
         return 'Graffiti Monkey completed successfully!'
 
     except KeyError, e:
-        print('Error: Environment variable not set: ' + str(e))
+        log.error('Error: Environment variable not set: ' + str(e))
     except Exception, e:
-        print('Error: Graffiti Monkey encountered the following error: ' + str(e))
+        log.error('Error: Graffiti Monkey encountered the following error: ' + str(e))
