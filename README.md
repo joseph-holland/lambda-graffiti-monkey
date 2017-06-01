@@ -37,9 +37,30 @@ Now we can just execute the function using the [python-lambda](https://github.co
 
 ```sh
 (graffiti-monkey) $ lambda invoke -v
-Loading function
-Releasing the Graffiti Monkey
+INFO:service:Loading function
+INFO:graffiti_monkey.core:Connecting to region eu-west-1 using profile None
+INFO:graffiti_monkey.core:Getting list of all volumes
+INFO:graffiti_monkey.core:Found 3 volumes
+INFO:graffiti_monkey.core:Processing volume 1 of 3 total volumes
+INFO:graffiti_monkey.core:Tagging vol-029e0e597169c31cf with [instance_id: i-099f436b19277b1bf]
+INFO:graffiti_monkey.core:Tagging vol-029e0e597169c31cf with [device: /dev/sdb]
+INFO:graffiti_monkey.core:Tagging vol-029e0e597169c31cf with [Name: Web01]
+INFO:graffiti_monkey.core:Processing volume 2 of 3 total volumes
+INFO:graffiti_monkey.core:Tagging vol-009215e7f776fd076 with [instance_id: i-099f436b19277b1bf]
+INFO:graffiti_monkey.core:Tagging vol-009215e7f776fd076 with [device: /dev/sdc]
+INFO:graffiti_monkey.core:Tagging vol-009215e7f776fd076 with [Name: Web01]
+INFO:graffiti_monkey.core:Processing volume 3 of 3 total volumes
+INFO:graffiti_monkey.core:Tagging vol-0a42428577e79f0e3 with [instance_id: i-099f436b19277b1bf]
+INFO:graffiti_monkey.core:Tagging vol-0a42428577e79f0e3 with [device: /dev/xvda]
+INFO:graffiti_monkey.core:Tagging vol-0a42428577e79f0e3 with [Name: Web01]
+INFO:graffiti_monkey.core:Completed processing all volumes
+INFO:graffiti_monkey.core:Getting list of all snapshots
+INFO:graffiti_monkey.core:Found 0 snapshots
+INFO:graffiti_monkey.core:Completed processing all snapshots
 Graffiti Monkey completed successfully!
+
+execution time: 1.41162705s
+function execution timeout: 15s
 ```
 
 ### Deploying to AWS Lambda
