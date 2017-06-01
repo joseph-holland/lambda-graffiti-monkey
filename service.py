@@ -2,10 +2,7 @@
 
 from __future__ import print_function
 from graffiti_monkey import cli as gm_cli
-from pprint import pprint
-
 import os
-import sys
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -29,9 +26,7 @@ def handler(event, context):
                      }
         gm.initialize_monkey()
         gm.start_tags_propagation()
-
         return 'Graffiti Monkey completed successfully!'
-
     except KeyError, e:
         log.error('Error: Environment variable not set: ' + str(e))
     except Exception, e:
