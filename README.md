@@ -26,6 +26,7 @@ First we need to set some environment variables for Graffiti Monkey to use, so j
 
 ```sh
 (graffiti-monkey) $ export REGION="eu-west-1"
+(graffiti-monkey) $ export SNS_ARN="arn:aws:sns:eu-west-1:123456654321:lambda-graffiti-monkey"
 (graffiti-monkey) $ export INSTANCE_TAGS_TO_PROPAGATE="Name,device,instance_id"
 (graffiti-monkey) $ export VOLUME_TAGS_TO_PROPAGATE="Name,device,instance_id"
 (graffiti-monkey) $ export VOLUME_TAGS_TO_BE_SET=""
