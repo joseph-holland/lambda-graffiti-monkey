@@ -17,6 +17,7 @@
 from __future__ import print_function
 from graffiti_monkey import cli as gm_cli
 import os
+import boto3
 import logging
 
 # Remove existing log handler setup by Lambda
@@ -32,11 +33,25 @@ def envvar_to_list(envvar):
     return os.environ[envvar].split(',')
 
 
+def send_notification(sns_arn, region, error):
+    client = boto3.client('sns')
+
+    response = client.publish(
+        TopicArn=sns_arn,
+        Message='Error running Lambda Graffiti Monkey in ' + region + '. Error Message: ' + error
+
+    )
+
+    log.info('SNS Response: {}'.format(response))
+
+
 def handler(event, context):
     log.info('Loading function')
     try:
+        sns_arn = os.environ['SNS_ARN']
+        region = os.environ['REGION']
         gm = gm_cli.GraffitiMonkeyCli()
-        gm.region = os.environ['REGION']
+        gm.region = region
         gm.config = {"_instance_tags_to_propagate": envvar_to_list('INSTANCE_TAGS_TO_PROPAGATE'),
                      "_volume_tags_to_propagate": envvar_to_list('VOLUME_TAGS_TO_PROPAGATE'),
                      "_volume_tags_to_be_set": envvar_to_list('VOLUME_TAGS_TO_BE_SET'),
@@ -47,6 +62,12 @@ def handler(event, context):
         gm.start_tags_propagation()
         return 'Graffiti Monkey completed successfully!'
     except KeyError, e:
-        log.error('Error: Environment variable not set: ' + str(e))
+        error_message = 'Error: Environment variable not set: ' + str(e)
+        log.error(error_message)
+        log.info('Sending SNS message to ' + sns_arn)
+        send_notification(sns_arn, region, error_message)
     except Exception, e:
-        log.error('Error: Graffiti Monkey encountered the following error: ' + str(e))
+        error_message = 'Error: Graffiti Monkey encountered the following error: ' + str(e)
+        log.error(error_message)
+        log.info('Sending SNS message to ' + sns_arn)
+        send_notification(sns_arn, region, error_message)
