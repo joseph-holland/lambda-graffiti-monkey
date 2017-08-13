@@ -33,13 +33,13 @@ def envvar_to_list(envvar):
     return os.environ[envvar].split(',')
 
 
-def send_notification(sns_arn, region, error):
+def send_notification(sns_arn, region, subject, message):
     client = boto3.client('sns')
 
     response = client.publish(
         TopicArn=sns_arn,
-        Message='Error running Lambda Graffiti Monkey in ' + region + '. Error Message: ' + error
-
+        Subject=subject,
+        Message=message
     )
 
     log.info('SNS Response: {}'.format(response))
@@ -60,14 +60,16 @@ def handler(event, context):
                      }
         gm.initialize_monkey()
         gm.start_tags_propagation()
+        send_notification(sns_arn, region, 'Graffiti Monkey completed successfully',
+                          'Graffiti Monkey completed successfully in ' + region + '.')
         return 'Graffiti Monkey completed successfully!'
     except KeyError, e:
         error_message = 'Error: Environment variable not set: ' + str(e)
         log.error(error_message)
-        log.info('Sending SNS message to ' + sns_arn)
-        send_notification(sns_arn, region, error_message)
+        send_notification(sns_arn, region, 'Error running Graffiti Monkey',
+                          'Error running Lambda Graffiti Monkey in ' + region + '. Error Message: ' + error_message)
     except Exception, e:
         error_message = 'Error: Graffiti Monkey encountered the following error: ' + str(e)
         log.error(error_message)
-        log.info('Sending SNS message to ' + sns_arn)
-        send_notification(sns_arn, region, error_message)
+        send_notification(sns_arn, region, 'Error running Graffiti Monkey',
+                          'Error running Lambda Graffiti Monkey in ' + region + '. Error Message: ' + error_message)
