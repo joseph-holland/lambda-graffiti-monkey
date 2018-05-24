@@ -2,12 +2,15 @@
 
 An AWS Lambda function to run [Graffiti Monkey](https://github.com/Answers4AWS/graffiti-monkey) serverless. This function works great when triggered by a CloudWatch Events scheduled rule.
 
-## Table of Contents
+## Quickstart
 
-- [Installation](#installation)
-- [Usage](#usage)
+1. Download the latest zipped Lambda function from the [releases page](https://github.com/joseph-holland/lambda-graffiti-monkey/releases).
+2. Create a new Lambda function and upload the zip as the source (from AWS Console or cli, etc.)
+3. Create environment variables and set to desired values
+![Lambda Environment Variables](lambda_envvars.png "Lambda Environment Variables")
+4. Now you can test the function
 
-## Installation
+## Local Installation (mainly for test/development purposes)
 
 Begin by creating a new virtualenv and installing the required python modules:
 
@@ -18,9 +21,7 @@ $ source graffiti-monkey/bin/activate
 (graffiti-monkey) $ pip install -r requirements.txt
 ```
 
-## Usage
-
-### Running Locally (for testing and development, etc.)
+### Running locally (using python-lambda)
 
 First we need to set some environment variables for Graffiti Monkey to use, so just paste the below into your shell setting tags as required:
 
@@ -64,24 +65,10 @@ execution time: 1.41162705s
 function execution timeout: 15s
 ```
 
-### Deploying to AWS Lambda
-
-#### Auth Setup
-
-Either edit the config.yaml file for the python-lambda tool and insert your aws_access_key_id and aws_secret_access_key or set your AWS credentials up as per the AWS CLI standard or via environment variables.
-
-#### IAM Role Setup
-
-By default the python-lambda tool will look to use an IAM role called 'lambda_basic_execution' so create this role in advance (or edit the config.yaml accordingly).
-
-#### Deploying to Lambda
-
-Just execute the lambda deploy commend. This will evaluate your virtualenv and identify your project dependencies. It will package these up along with your handler function to a zip file that it then uploads to AWS Lambda.
-
-You can now log into the [AWS Lambda management console](https://console.aws.amazon.com/lambda/) to verify the code deployed successfully.
+### Creating Lambda function bundle
 
 ```sh
-(graffiti-monkey) $ lambda deploy
+(graffiti-monkey) $ lambda build
 Gathering pip packages
 Installing appdirs==1.4.3
 Installing boto==2.47.0
@@ -104,17 +91,6 @@ Installing setuptools==35.0.2
 Installing six==1.10.0
 Installing wheel==0.29.0
 Installing wsgiref==0.1.2
-Found credentials in environment variables.
-Starting new HTTPS connection (1): lambda.eu-west-1.amazonaws.com
-Creating your new Lambda function
-Starting new HTTPS connection (1): sts.amazonaws.com
-Starting new HTTPS connection (1): lambda.eu-west-1.amazonaws.com
-```
+````
 
-#### Setting Lambda Environment Variables
-
-For Graffiti Monkey to run properly you will need to set the following Lambda environment variables:
-
-![Lambda Environment Variables](lambda_envvars.png "Lambda Environment Variables")
-
-Now you can save and test the function.
+This will create a new zip file under the `dist` folder.  This file can now be uploaded to Lambda as the function source.
