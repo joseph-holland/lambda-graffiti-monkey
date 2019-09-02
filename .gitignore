@@ -1,3 +1,7 @@
+*.pyc
+.idea/*
+dist/*
+
 # Distribution / packaging
 .Python
 env/
