@@ -26,7 +26,7 @@ $ source graffiti-monkey/bin/activate
 First we need to set some environment variables for Graffiti Monkey to use, so just paste the below into your shell setting tags as required:
 
 ```sh
-(graffiti-monkey) $ export REGION="eu-west-1"
+(graffiti-monkey) $ export REGION="eu-west-1,us-east-1"
 (graffiti-monkey) $ export SNS_ARN="arn:aws:sns:eu-west-1:123456654321:lambda-graffiti-monkey"
 (graffiti-monkey) $ export INSTANCE_TAGS_TO_PROPAGATE="Name,device,instance_id"
 (graffiti-monkey) $ export VOLUME_TAGS_TO_PROPAGATE="Name,device,instance_id"
@@ -91,6 +91,36 @@ Installing setuptools==35.0.2
 Installing six==1.10.0
 Installing wheel==0.29.0
 Installing wsgiref==0.1.2
-````
+```
 
 This will create a new zip file under the `dist` folder.  This file can now be uploaded to Lambda as the function source.
+
+## Deploying with Serverless
+
+A `serverless.yml` configuration file is included for deployment with the `serverless` npm module. First, customise the settings in the `serverless.yml` file. You will need to set:
+
+- Environment variables
+- Preferred region
+- Any other preferences, such as triggers (a cloudtrail trigger is included by default)
+
+Make sure you have `npm` and `serverless` installed globally ([see here for instructions on setting up `npm`](https://www.npmjs.com/get-npm)):
+
+```sh
+npm i -g serverless
+```
+
+Also install the `serverless-python-requirements` plugin for serverless, so that it bundles up the python dependencies correctly:
+
+```sh
+sls plugin install -n serverless-python-requirements
+```
+
+And execute the deployment:
+
+```sh
+sls deploy
+```
+
+## Python 2 / Python 3
+
+Since `graffiti-monkey` requires Python 2 to install, you will need `Python 2.X` set as the default python on your current path when you run the deployment. If you have Python 3 installed on your system, you can set up a virtual environment with Python 2 installed specifically for this project.
