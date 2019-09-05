@@ -22,8 +22,8 @@ import logging
 
 # Remove existing log handler setup by Lambda
 log = logging.getLogger()
-for handler in log.handlers:
-    log.removeHandler(handler)
+for log_handler in log.handlers:
+    log.removeHandler(log_handler)
 
 FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
@@ -48,28 +48,34 @@ def send_notification(sns_arn, region, subject, message):
 def handler(event, context):
     log.info('Loading function')
     try:
-        sns_arn = os.environ['SNS_ARN']
-        region = os.environ['REGION']
-        gm = gm_cli.GraffitiMonkeyCli()
-        gm.region = region
-        gm.config = {"_instance_tags_to_propagate": envvar_to_list('INSTANCE_TAGS_TO_PROPAGATE'),
-                     "_volume_tags_to_propagate": envvar_to_list('VOLUME_TAGS_TO_PROPAGATE'),
-                     "_volume_tags_to_be_set": envvar_to_list('VOLUME_TAGS_TO_BE_SET'),
-                     "_snapshot_tags_to_be_set": envvar_to_list('SNAPSHOT_TAGS_TO_BE_SET'),
-                     "_instance_filter": envvar_to_list('INSTANCE_FILTER'),
-                     }
-        gm.initialize_monkey()
-        gm.start_tags_propagation()
-        send_notification(sns_arn, region, 'Graffiti Monkey completed successfully',
-                          'Graffiti Monkey completed successfully in ' + region + '.')
+        sns_arn = os.environ.get('SNS_ARN', '')
+        region_list = envvar_to_list('REGION')
+        for region in region_list:
+            gm = gm_cli.GraffitiMonkeyCli()
+            gm.region = region
+            gm.config = {"_instance_tags_to_propagate": envvar_to_list('INSTANCE_TAGS_TO_PROPAGATE'),
+                        "_volume_tags_to_propagate": envvar_to_list('VOLUME_TAGS_TO_PROPAGATE'),
+                        "_volume_tags_to_be_set": envvar_to_list('VOLUME_TAGS_TO_BE_SET'),
+                        "_snapshot_tags_to_be_set": envvar_to_list('SNAPSHOT_TAGS_TO_BE_SET'),
+                        "_instance_filter": envvar_to_list('INSTANCE_FILTER'),
+                        }
+            gm.initialize_monkey()
+            gm.start_tags_propagation()
+            if sns_arn:
+                send_notification(sns_arn, region, 'Graffiti Monkey completed successfully',
+                                'Graffiti Monkey completed successfully in ' + region + '.')
         return 'Graffiti Monkey completed successfully!'
-    except KeyError, e:
+    except KeyError as e:
         error_message = 'Error: Environment variable not set: ' + str(e)
         log.error(error_message)
-        send_notification(sns_arn, region, 'Error running Graffiti Monkey',
-                          'Error running Lambda Graffiti Monkey in ' + region + '. Error Message: ' + error_message)
-    except Exception, e:
+        if sns_arn:
+            send_notification(sns_arn, region, 'Error running Graffiti Monkey',
+                            'Error running Lambda Graffiti Monkey in ' + region + '. Error Message: ' + error_message)
+        raise e
+    except Exception as e:
         error_message = 'Error: Graffiti Monkey encountered the following error: ' + str(e)
         log.error(error_message)
-        send_notification(sns_arn, region, 'Error running Graffiti Monkey',
-                          'Error running Lambda Graffiti Monkey in ' + region + '. Error Message: ' + error_message)
+        if sns_arn:
+            send_notification(sns_arn, region, 'Error running Graffiti Monkey',
+                            'Error running Lambda Graffiti Monkey in ' + region + '. Error Message: ' + error_message)
+        raise e
