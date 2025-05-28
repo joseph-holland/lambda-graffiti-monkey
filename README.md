@@ -1,5 +1,9 @@
 # Lambda Graffiti Monkey
 
+# Deprecation Notice
+
+This is extremely outdated and relied on code from the upstream grafitt-monkey project - that project has not been updated to use boto3. I'm sure there are other ways to auto-tag resources now in AWS too.
+
 An AWS Lambda function to run [Graffiti Monkey](https://github.com/Answers4AWS/graffiti-monkey) serverless. This function works great when triggered by a CloudWatch Events scheduled rule.
 
 ## Quickstart
