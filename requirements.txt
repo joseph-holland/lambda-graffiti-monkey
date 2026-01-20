@@ -12,6 +12,6 @@ pyaml==15.8.2
 pyparsing==2.2.0
 python-dateutil==2.5.3
 python-lambda==0.5.0
-PyYAML==3.11
+PyYAML==5.4
 s3transfer==0.1.10
 six==1.10.0
